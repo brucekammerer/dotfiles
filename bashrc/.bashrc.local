@@ -70,7 +70,12 @@ setbg() {
 
 # edit .bashrc quickly
 rced() {
-  $EDITOR ~/.bashrc
+  $EDITOR ~/.bashrc.local
+}
+
+# source .bashrc quickly
+rcso() {
+  source ~/.bashrc.local
 }
 
 # clear terminal
@@ -80,11 +85,14 @@ cl() {
 
 # ---------------- Git aliases ----------------
 if command -v git >/dev/null; then
+  alias gb='git branch'
   alias gs='git status'
+  alias gS='git switch'
   alias ga='git add'
   alias gc='git commit'
   alias gca='git commit --amend'
   alias gp='git pull'
+  alias gP='git push'
   alias gl='git log --oneline --graph --decorate'
 fi
 
@@ -112,6 +120,7 @@ export EDITOR="vim"
 export VISUAL="vim"
 export BROWSER="firefox"
 export QT_QPA_PLATFORMTHEME=qt6ct
+export BAT_THEME="Nord"
 
 # ---------------- FZF setup ----------------
 # Use ripgrep (rg) as default source for fzf
@@ -119,3 +128,10 @@ if type rg &> /dev/null; then
   export FZF_DEFAULT_COMMAND='rg --files'
   export FZF_DEFAULT_OPTS='-m'
 fi
+
+# Set Nord colorscheme
+# export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+#     --color=fg:#e5e9f0,hl:#81a1c1
+#     --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
+#     --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac
+#     --color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b'

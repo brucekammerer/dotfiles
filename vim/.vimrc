@@ -120,9 +120,19 @@ source $VIMRUNTIME/vimrc_example.vim
 " =====================
 colorscheme nord
 
-" Сделать фон прозрачным
+" Make the background transparent
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE
 highlight Folded ctermbg=NONE guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE
+
+set textwidth=78
+set wrap
+set linebreak
+
+" Disable arrow keys in the normal mode
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
