@@ -18,7 +18,17 @@ shopt -s cmdhist                   # save multi-line commands as one line
 shopt -s extglob                   # enable extended pattern matching
 
 # ---------------- PATH ----------------
-export PATH="$HOME/bin:$PATH"      # add ~/bin to PATH
+__add_path() {
+    [ -d "$1" ] || return
+    case ":$PATH:" in
+        *":$1:"*)
+            ;;
+        *)
+            export PATH="$1:$PATH" ;;
+    esac
+}
+
+__add_path "$HOME/Bin"
 
 # ---------------- Aliases ----------------
 alias v='vim'
@@ -36,6 +46,10 @@ alias ..='cd ..'
 alias ...='cd ../..'
 
 # ---------------- Functions ----------------
+
+path() {
+    echo "$PATH" | tr ':' '\n'
+}
 
 # mkdir + cd
 mkcd() {
@@ -85,6 +99,7 @@ cl() {
 
 # ---------------- Git aliases ----------------
 if command -v git >/dev/null; then
+  alias gi='git init'
   alias gb='git branch'
   alias gs='git status'
   alias gS='git switch'
