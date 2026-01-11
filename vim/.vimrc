@@ -37,17 +37,18 @@ Plug 'junegunn/fzf.vim'                     " FZF integration for Vim
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Install FZF
 Plug 'vimwiki/vimwiki'                       " Personal wiki
 Plug 'tpope/vim-surround'                    " Surround text objects easily
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' } " Python development
+Plug 'sheerun/vim-polyglot'
+" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' } " Python development
 call plug#end()
 
 " =====================
 " Command-line completion
 " =====================
-set wildmenu
-set wildmode=longest:full,full
-set wildoptions=pum,fuzzy
-set pumheight=8
-set wildignorecase
+" set wildmenu
+" set wildmode=longest:full,full
+" set wildoptions=pum,fuzzy
+" set pumheight=8
+" set wildignorecase
 
 " =====================
 " Leader key
@@ -157,6 +158,15 @@ set history=10000         " Command history size
 " =====================
 " Python-mode settings
 " =====================
-let g:pymode_python = 'python3'
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_lint = 0
+" let g:pymode_python = 'python3'
+" let g:pymode_rope_complete_on_dot = 0
+" let g:pymode_lint = 0
+
+" Playing with custom completions
+function! NemoFunc()
+    let names = [ 'Bruce', 'Nemo', 'Blood', 'Luden' ]
+    call complete(col('.'), names)
+    return ''
+endfunction
+
+imap <C-x>m <C-r>=NemoFunc()<CR>

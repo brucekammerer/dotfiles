@@ -101,6 +101,9 @@ alias df='df -h'
 alias du='du -h'
 alias cl='clear'
 
+# Python
+alias py='python3'
+
 # ---------------- Functions ----------------
 path() {
 	echo "$PATH" | tr ':' '\n'
