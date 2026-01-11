@@ -1,56 +1,17 @@
 " =====================
-" Basic options
-" =====================
-set hidden               " Разрешить переключение буферов без сохранения
-set number               " Показ номеров строк
-set relativenumber       " Относительные номера строк
-set cursorline           " Подсветка текущей строки
-set scrolloff=8          " Минимальный отступ при скролле
-set sidescrolloff=8      " Минимальный горизонтальный отступ
-set nowrap               " Отключить перенос строк
-set spelllang=en,ru      " Проверка орфографии для английского и русского
-set nocp                 " Современный Vim, а не vi
-filetype plugin on       " Включить автоподгрузку плагинов по типу файла
-set clipboard=unnamedplus
-
-" =====================
-" Russian language input
-" =====================
-set keymap=russian-jcukenwin
-set iminsert=0
-set imsearch=-1
-
-" =====================
-" Indentation
-" =====================
-set nolist               " Не показывать спецсимволы табуляции и конца строки
-set tabstop=4            " Ширина таба в пробелах
-set shiftwidth=4         " Количество пробелов при автоотступе
-set expandtab            " Преобразовывать табы в пробелы
-set autoindent           " Автоматический отступ по предыдущей строке
-
-" =====================
-" Search
-" =====================
-set ignorecase           " Игнорировать регистр при поиске
-set smartcase            " Но учитывать регистр, если есть заглавные
-set hlsearch             " Подсвечивать найденное
-set incsearch            " Поиск по мере ввода
-
-" =====================
 " Visuals
 " =====================
 if has("termguicolors")
-  set termguicolors      " Поддержка true colors
+  set termguicolors       " Enable true color support
 endif
-set colorcolumn=80       " Вертикальная линия на 80 символах
-set noshowmode           " Не показывать режим (Normal/Insert) внизу
+set colorcolumn=80        " Vertical guide at 80 characters
+set noshowmode            " Do not show mode in the command line
 
 " =====================
 " File handling
 " =====================
-set nobackup             " Отключить создание backup-файлов
-set autoread             " Автоматически читать файл при внешних изменениях
+set nobackup              " Disable backup files
+set autoread              " Reload files changed outside of Vim
 
 " =====================
 " Undo (persistent)
@@ -58,7 +19,6 @@ set autoread             " Автоматически читать файл пр
 if has("persistent_undo")
   set undofile
   let &undodir = expand("~/.vim/undodir")
-
   if !isdirectory(&undodir)
     call mkdir(&undodir, "p")
   endif
@@ -68,13 +28,16 @@ endif
 " Plugins (vim-plug)
 " =====================
 call plug#begin()
-Plug 'nordtheme/vim'               " Темная цветовая схема Nord
-Plug 'jiangmiao/auto-pairs'        " Автозакрытие скобок
-Plug 'tpope/vim-commentary'        " Комментирование кода
-Plug 'mattn/emmet-vim'             " Быстрое создание HTML/CSS
-Plug 'tpope/vim-unimpaired'        " Полезные команды для парного перемещения
-Plug 'junegunn/fzf.vim'            " FZF интеграция с Vim
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Установка FZF
+Plug 'nordtheme/vim'                        " Nord colorscheme
+Plug 'jiangmiao/auto-pairs'                 " Auto-close brackets and quotes
+Plug 'tpope/vim-commentary'                 " Comment code easily
+Plug 'mattn/emmet-vim'                      " Fast HTML/CSS creation
+Plug 'tpope/vim-unimpaired'                 " Handy paired motions
+Plug 'junegunn/fzf.vim'                     " FZF integration for Vim
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Install FZF
+Plug 'vimwiki/vimwiki'                       " Personal wiki
+Plug 'tpope/vim-surround'                    " Surround text objects easily
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' } " Python development
 call plug#end()
 
 " =====================
@@ -111,8 +74,10 @@ nnoremap <silent> <Leader>h/ :History/<CR>
 " =====================
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 
-" The code inside this file makes Vim remember last cursor position inside
-" a file. Need to explore the reason.
+" =====================
+" Restore last cursor position
+" =====================
+" Make Vim remember last cursor position when reopening files
 source $VIMRUNTIME/vimrc_example.vim
 
 " =====================
@@ -120,7 +85,7 @@ source $VIMRUNTIME/vimrc_example.vim
 " =====================
 colorscheme nord
 
-" Make the background transparent
+" Make background transparent
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight LineNr ctermbg=NONE guibg=NONE
@@ -131,8 +96,67 @@ set textwidth=78
 set wrap
 set linebreak
 
-" Disable arrow keys in the normal mode
+" =====================
+" Key mappings
+" =====================
+" Disable arrow keys
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
+
+" Toggle spell checking
+map <F5> :setlocal spell!<CR>
+
+" =====================
+" VimWiki settings
+" =====================
+let g:vimwiki_list = [{'path': '~/VimWiki/', 'syntax': 'markdown', 'ext': 'md'}]
+let g:vimwiki_global_ext = 0
+
+" =====================
+" Basic options
+" =====================
+set hidden                " Allow switching buffers without saving
+set number                " Show line numbers
+set relativenumber        " Show relative line numbers
+set cursorline            " Highlight current line
+set scrolloff=8           " Minimal number of lines above/below cursor
+set sidescrolloff=8       " Minimal horizontal offset
+set nowrap                " Disable line wrapping
+set spelllang=en,ru       " Spell check for English and Russian
+set nocp                  " Use modern Vim behavior
+filetype plugin on        " Enable filetype-based plugins
+
+" =====================
+" Russian language input
+" =====================
+set keymap=russian-jcukenwin
+set iminsert=0
+set imsearch=-1
+
+" =====================
+" Indentation
+" =====================
+set nolist                " Do not display tab or EOL characters
+set tabstop=4             " Number of spaces per tab
+set shiftwidth=4          " Spaces for auto-indent
+set expandtab             " Convert tabs to spaces
+set autoindent            " Use indent from previous line
+set softtabstop=4
+
+" =====================
+" Search settings
+" =====================
+set ignorecase            " Ignore case in search
+set smartcase             " But respect uppercase letters
+set incsearch             " Incremental search
+set nohlsearch            " Do not highlight search results
+set history=10000         " Command history size
+
+" =====================
+" Python-mode settings
+" =====================
+let g:pymode_python = 'python3'
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_lint = 0

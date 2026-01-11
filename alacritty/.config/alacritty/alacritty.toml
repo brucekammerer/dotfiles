@@ -4,7 +4,7 @@ import = [
 ]
 [window]
 padding = { x = 8, y = 8}
-opacity = 0.96
+opacity = 1.0
 [font]
 size = 12
 normal = { family = "Iosevka NF", style = "Regular" }

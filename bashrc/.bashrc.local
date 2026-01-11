@@ -3,212 +3,223 @@
 # Personal Bash settings
 # ==================================================
 
+# ---------------- Quick Reference ----------------
+# Most commonly used aliases and functions
+# --------------------------------------------
+# Aliases:
+#   ll       -> ls -lah --color=auto
+#   la       -> ls -A
+#   l        -> ls -CF
+#   ..       -> cd ..
+#   ...      -> cd ../..
+#   v / vi   -> vim
+#   uvr      -> uv run
+#   uva      -> uv add
+#   uvpl     -> uv pip list
+#   rfi      -> ruff check --select I --fix
+#   rc       -> ruff check
+#   rf       -> ruff format
+#   cl       -> clear
+# Git Aliases:
+#   gs       -> git status
+#   gb       -> git branch
+#   gco      -> git checkout
+#   ga.      -> git add .
+#   gcm      -> git commit -m
+#   gac      -> add + commit
+# Functions:
+#   mkcd     -> mkdir and cd
+#   extract  -> extract archive
+#   path     -> show PATH line by line
+#   setbg    -> set desktop wallpaper
+#   mksh     -> create shell scripts and open in Vim
+#   lintfmt  -> ruff check + format
+#   intfmtt  -> mypy + ruff check + format
+
 # ---- execute only in interactive mode ----
 [[ $- != *i* ]] && return
 
 # ---------------- History ----------------
-export HISTCONTROL=ignoreboth      # ignore duplicates and lines starting with space
-export HISTSIZE=200000             # number of commands in memory
-export HISTFILESIZE=100000         # number of commands in history file
-shopt -s histappend                # append history, don't overwrite
+export HISTCONTROL=ignoreboth
+export HISTSIZE=200000
+export HISTFILESIZE=100000
+shopt -s histappend
 
 # ---------------- Shell options ----------------
-shopt -s checkwinsize              # update LINES and COLUMNS after window resize
-shopt -s cmdhist                   # save multi-line commands as one line
-shopt -s extglob                   # enable extended pattern matching
+shopt -s checkwinsize
+shopt -s cmdhist
+shopt -s extglob
 
 # ---------------- PATH ----------------
 __add_path() {
-    [ -d "$1" ] || return
-    case ":$PATH:" in
-        *":$1:"*)
-            ;;
-        *)
-            export PATH="$1:$PATH" ;;
-    esac
+	[ -d "$1" ] || return
+	case ":$PATH:" in
+	*":$1:"*) ;;
+	*) export PATH="$1:$PATH" ;;
+	esac
 }
 
+__add_path "/home/nemo/.local/bin"
 __add_path "$HOME/Bin"
 
-# ---------------- Aliases ----------------
-alias v='vim'
-alias vi='vim'
-
-alias ll='ls -lah --color=auto'
-alias la='ls -A'
-alias l='ls -CF'
-
-alias grep='grep --color=auto'
-alias df='df -h'
-alias du='du -h'
-
-alias ..='cd ..'
-alias ...='cd ../..'
-
-# ---------------- Functions ----------------
-
-path() {
-    echo "$PATH" | tr ':' '\n'
-}
-
-# mkdir + cd
-mkcd() {
-  mkdir -p "$1" && cd "$1"
-}
-
-# check which process is using a port
-port() {
-  command -v lsof >/dev/null && sudo lsof -i :"$1"
-}
-
-# universal archive extractor
-extract() {
-  case "$1" in
-    *.tar.bz2) tar xjf "$1" ;;
-    *.tar.gz)  tar xzf "$1" ;;
-    *.bz2)     bunzip2 "$1" ;;
-    *.rar)     unrar x "$1" ;;
-    *.gz)      gunzip "$1" ;;
-    *.tar)     tar xf "$1" ;;
-    *.zip)     unzip "$1" ;;
-    *.7z)      7z x "$1" ;;
-    *) echo "Cannot extract '$1'" ;;
-  esac
-}
-
-# set desktop background using feh
-setbg() {
-  local image_path=~/Pictures/wallpapers/japan-background-digital-art.jpg
-  feh --bg-fill "$image_path"
-}
-
-# edit .bashrc quickly
-rced() {
-  $EDITOR ~/.bashrc.local
-}
-
-# source .bashrc quickly
-rcso() {
-  source ~/.bashrc.local
-}
-
-# clear terminal
-cl() {
-  clear
-}
-
-# ---------------- Git aliases ----------------
-if command -v git >/dev/null; then
-    # -----------------------
-    # INIT / BRANCH / STATUS
-    # -----------------------
-    alias gi='git init'
-    alias gb='git branch'
-    alias gbd='git branch -d'           # удалить локальную ветку
-    alias gs='git status'
-    alias gss='git status -s'           # краткий статус
-
-    # -----------------------
-    # SWITCH / CHECKOUT
-    # -----------------------
-    alias gsw='git switch'
-    alias gswc='git switch -c'          # создать и переключиться
-    alias gco='git checkout'            # старый стиль
-
-    # -----------------------
-    # ADD / COMMIT
-    # -----------------------
-    alias ga='git add'
-    alias ga.='git add .'               # добавить все файлы
-    alias gc='git commit'
-    alias gcm='git commit -m'           # commit с сообщением
-    alias gca='git commit --amend'
-    alias gac='git add . && git commit'  # быстро add + commit
-    alias gacm='git add . && git commit -m'  # быстро add + commit
-    alias gaicm='git add -i && git commit -m' # интерактивный add + commit
-
-    # -----------------------
-    # PULL / PUSH
-    # -----------------------
-    alias gpl='git pull'                    # обычный pull
-    alias gplo='git pull origin'            # pull с origin
-    alias gplom='git pull origin main'    # pull origin main
-    alias gplr='git pull --rebase'          # pull с rebase
-    alias gplrom='git pull --rebase origin main' # pull origin main с rebase
-
-    alias gp='git push'                      # обычный push
-    alias gpo='git push origin'              # push на origin
-    alias gpom='git push origin main'      # push origin main
-    alias gpf='git push --force-with-lease' # безопасный force push
-
-    # -----------------------
-    # LOG
-    # -----------------------
-    alias gl='git log --oneline --graph --decorate'        # базовый log
-    alias gla='git log --oneline --graph --decorate --all' # log всех веток
-    alias glf='git log --oneline --graph --decorate --follow' # история конкретного файла
-    alias gloga='git log --author="$(git config user.name)" --oneline --graph --decorate' # свои коммиты
-
-    # -----------------------
-    # DIFF
-    # -----------------------
-    alias gd='git diff'
-    alias gds='git diff --staged'
-    alias gdc='git diff --cached'
-    alias gdst='git diff --staged --color-words'  # staged diff с подсветкой слов
-
-    # -----------------------
-    # RESET / STASH
-    # -----------------------
-    alias gr='git reset'
-    alias grh='git reset HEAD'
-    alias gst='git stash'
-    alias gstp='git stash pop'
-    alias gstl='git stash list'
-    alias gstc='git stash clear'
-
-    # -----------------------
-    # BLAME
-    # -----------------------
-    alias gbl='git blame'
-fi
-
-# ---------------- Prompt ----------------
-
-# Colors for prompt
-GREEN="\e[32m"
-BLUE="\e[34m"
-YELLOW="\e[33m"
-RESET="\e[0m"
-
-# Show git branch in prompt
-git_branch() {
-  if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    echo -e " ${YELLOW}($(git rev-parse --abbrev-ref HEAD 2>/dev/null))${RESET} "
-  fi
-}
-
-# Set PS1
-PS1='[\[\e[32m\]\u@\h\[\e[0m\] \[\e[34m\]\W\[\e[0m\]]$(git_branch)\$ '
-
 # ---------------- Editor & environment ----------------
-set -o vi                        # use vim keybindings
+set -o vi
 export EDITOR="vim"
 export VISUAL="vim"
 export BROWSER="firefox"
 export QT_QPA_PLATFORMTHEME=qt6ct
 export BAT_THEME="Nord"
 
-# ---------------- FZF setup ----------------
-# Use ripgrep (rg) as default source for fzf
-if type rg &> /dev/null; then
-  export FZF_DEFAULT_COMMAND='rg --files'
-  export FZF_DEFAULT_OPTS='-m'
+# ---------------- Aliases ----------------
+# Editor
+alias v='vim'
+alias vi='vim'
+
+# UV shortcuts
+alias uvr='uv run'
+alias uva='uv add'
+alias uvpl='uv pip list'
+alias uvrv='uv run vim'
+alias uvrm='uv run mypy'
+
+# Ruff Python linter
+alias rfi='ruff check --select I --fix'
+alias rf='ruff format'
+alias rc='ruff check'
+alias rcf='ruff check --fix'
+
+# Navigation and listing
+alias ll='ls -lah --color=auto'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# Utilities
+alias grep='grep --color=auto'
+alias df='df -h'
+alias du='du -h'
+alias cl='clear'
+
+# ---------------- Functions ----------------
+path() {
+	echo "$PATH" | tr ':' '\n'
+}
+
+mkcd() {
+	mkdir -p "$1" && cd "$1"
+}
+
+port() {
+	command -v lsof >/dev/null && sudo lsof -i :"$1"
+}
+
+extract() {
+	case "$1" in
+	*.tar.bz2) tar xjf "$1" ;;
+	*.tar.gz) tar xzf "$1" ;;
+	*.bz2) bunzip2 "$1" ;;
+	*.rar) unrar x "$1" ;;
+	*.gz) gunzip "$1" ;;
+	*.tar) tar xf "$1" ;;
+	*.zip) unzip "$1" ;;
+	*.7z) 7z x "$1" ;;
+	*) echo "Cannot extract '$1'" ;;
+	esac
+}
+
+setbg() {
+	local image_path=~/Pictures/wallpapers/japan-background-digital-art.jpg
+	feh --bg-fill "$image_path"
+}
+
+rced() { $EDITOR ~/.bashrc.local; }
+rcso() { source ~/.bashrc.local; }
+
+_handle_file() {
+	local filepath=$1
+	declare -i status_code=0
+	if [[ -e "${filepath}" ]]; then
+		echo "'${filepath}' already exists" >&2
+	else
+		echo -e '#!/usr/bin/env bash\n\n' >"${filepath}" || status_code=1
+	fi
+	return $status_code
+}
+
+mksh() {
+	declare -a filepaths=("$@")
+	declare -a filepaths_to_open=()
+	for filepath in "${filepaths[@]}"; do
+		_handle_file "${filepath}" &&
+			filepaths_to_open+=("${filepath}")
+	done
+	vim +'normal 3G' "${filepaths_to_open[@]}"
+}
+
+lntfmt() {
+	ruff check "$@" &&
+		ruff format "$@"
+}
+
+tlntfmt() {
+	uv run mypy "$@" &&
+		ruff check "$@" &&
+		ruff format "$@"
+}
+
+# ---------------- Git aliases ----------------
+if command -v git >/dev/null; then
+	alias gi='git init'
+	alias gb='git branch'
+	alias gbd='git branch -d'
+	alias gs='git status'
+	alias gss='git status -s'
+	alias gsw='git switch'
+	alias gswc='git switch -c'
+	alias gco='git checkout'
+	alias ga='git add'
+	alias ga.='git add .'
+	alias gc='git commit'
+	alias gcm='git commit -m'
+	alias gca='git commit --amend'
+	alias gac='git add . && git commit'
+	alias gacm='git add . && git commit -m'
+	alias gaicm='git add -i && git commit -m'
+	alias gpl='git pull'
+	alias gplo='git pull origin'
+	alias gplom='git pull origin main'
+	alias gplr='git pull --rebase'
+	alias gplrom='git pull --rebase origin main'
+	alias gp='git push'
+	alias gpo='git push origin'
+	alias gpom='git push origin main'
+	alias gpf='git push --force-with-lease'
+	alias gl='git log --oneline --graph --decorate'
+	alias gla='git log --oneline --graph --decorate --all'
+	alias glf='git log --oneline --graph --decorate --follow'
+	alias gloga='git log --author="$(git config user.name)" --oneline --graph --decorate'
+	alias gd='git diff'
+	alias gds='git diff --staged'
+	alias gdc='git diff --cached'
+	alias gdst='git diff --staged --color-words'
+	alias gr='git reset'
+	alias grh='git reset HEAD'
+	alias gst='git stash'
+	alias gstp='git stash pop'
+	alias gstl='git stash list'
+	alias gstc='git stash clear'
+	alias gbl='git blame'
 fi
 
-# Set Nord colorscheme
-# export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-#     --color=fg:#e5e9f0,hl:#81a1c1
-#     --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
-#     --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac
-#     --color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b'
+# ---------------- FZF setup ----------------
+if type rg &>/dev/null; then
+	export FZF_DEFAULT_COMMAND='rg --files'
+	export FZF_DEFAULT_OPTS='-m'
+fi
+
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+--color=fg:#e5e9f0,hl:#81a1c1 \
+--color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1 \
+--color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac \
+--color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b"
