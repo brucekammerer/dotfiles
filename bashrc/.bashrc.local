@@ -104,6 +104,9 @@ alias cl='clear'
 # Python
 alias py='python3'
 
+# Ranger
+alias rr='ranger'
+
 # ---------------- Functions ----------------
 path() {
 	echo "$PATH" | tr ':' '\n'

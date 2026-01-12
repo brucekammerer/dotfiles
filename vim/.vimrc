@@ -24,6 +24,8 @@ if has("persistent_undo")
   endif
 endif
 
+filetype plugin on
+
 " =====================
 " Plugins (vim-plug)
 " =====================
@@ -38,7 +40,6 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Install FZF
 Plug 'vimwiki/vimwiki'                       " Personal wiki
 Plug 'tpope/vim-surround'                    " Surround text objects easily
 Plug 'sheerun/vim-polyglot'
-" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' } " Python development
 call plug#end()
 
 " =====================
