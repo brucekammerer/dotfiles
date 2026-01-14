@@ -16,14 +16,14 @@ exec --no-startup-id ~/set_once.sh
 # Please see http://i3wm.org/docs/userguide.html for the official i3 reference!
 
 #######################
-# config starts here: #
+# config starts here: 
 #######################
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango: Iosevka NF 10
+font pango: Iosevka NF 15
 
 # set the mod key to the winkey:
 set $mod Mod1
@@ -533,7 +533,7 @@ client.urgent               $urgentred  $urgentred  $white      $yellowbrown    
 # Start i3bar to display a workspace bar
 # (plus the system information i3status finds out, if available)
 bar {
-        font pango: Iosevka NF 10
+        font pango: Iosevka NF 15
         status_command i3blocks -c ~/.config/i3/i3blocks.conf
             position bottom
 #           i3bar_command i3bar --transparency

@@ -113,7 +113,7 @@ map <F5> :setlocal spell!<CR>
 " =====================
 " VimWiki settings
 " =====================
-let g:vimwiki_list = [{'path': '~/VimWiki/', 'syntax': 'markdown', 'ext': 'md'}]
+let g:vimwiki_list = [{'path': '~/Notes/', 'syntax': 'markdown', 'ext': 'md'}]
 let g:vimwiki_global_ext = 0
 
 " =====================
