@@ -63,7 +63,7 @@ __add_path "/home/nemo/.local/bin"
 __add_path "$HOME/Bin"
 
 # ---------------- Editor & environment ----------------
-set -o vi
+set -o emacs
 export EDITOR="vim"
 export VISUAL="vim"
 export BROWSER="firefox"
